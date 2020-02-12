@@ -1,0 +1,47 @@
+.search-result-container {
+
+    .search-result-list-container {
+        border-right: 1px solid #0000001f;
+        padding: 5px;
+        max-height: 680px;
+
+        .heading {
+            width: 100%;
+        }
+
+        .inner-list {
+            padding: 0 0 15px 8px;
+        }
+
+        .category-heading {
+            span {
+                font-size: 1.2rem;
+            }
+        }
+
+        .category-header-container {
+            padding: 0 5px;
+        }
+
+        .search-caption {
+            font-size: 1.1em;
+        }
+
+        .search-result-tag {
+            font-size: 0.72rem;
+            height: 20px;
+            margin: 0 5px 3px 0;
+
+            span {
+                margin-left: 3px;
+                padding-right: 7px;
+            }
+        }
+
+        .search-description {
+            color: #607d8b;
+            font-size: 0.78rem;
+            margin-top: 3px;
+        }
+    }
+}

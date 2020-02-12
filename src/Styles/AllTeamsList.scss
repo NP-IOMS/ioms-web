@@ -1,0 +1,68 @@
+.all-teams-list {
+
+    .header-container {
+        display: flex;
+        padding: 15px 30px
+    }
+
+
+    .header-container {
+        .search-container {
+            flex-direction: row-reverse;
+            display: flex;
+
+            .search-input {
+                width: 100%;
+
+                &:hover:before {
+                    border-bottom: 1px solid #0000006b;
+                }
+            }
+        }
+    }
+
+    .team-list-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .list-column {
+        flex: 33%;
+        max-width: 33%
+    }
+
+    @media (max-width: 800px) {
+        .list-column {
+            flex: 50%;
+            max-width: 50%
+        }
+    }
+
+    @media (max-width: 600px) {
+        .list-column {
+            flex: 100%;
+            max-width: 100%
+        }
+    }
+
+    .team-card-container {
+        .card {
+            flex-grow: 1;
+            background-color: #f5f5f5;
+
+            .card-content-container {
+                padding-bottom: 4px;
+
+                .team-tags-container {
+                    margin: 8px 0;
+
+                    .team-tags {
+                        margin-right: 5px;
+                        margin-bottom: 5px;
+                    }
+                }
+            }
+        }
+    }
+}

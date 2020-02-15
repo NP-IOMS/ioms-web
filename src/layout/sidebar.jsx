@@ -10,7 +10,7 @@ import {
   ListItemText
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import '../Styles/Sidebar.scss';
+import '../styles/Sidebar.scss';
 import ArrowTooltip from '../components/common/arrowTooltip';
 
 export default class Sidebar extends Component {
@@ -24,49 +24,60 @@ export default class Sidebar extends Component {
       >
         <List>
           <Divider />
-          <ArrowTooltip title='Home' placement='right'>
-            <Link to='/ioms/home/'>
+          <Link to='/ioms/home/'>
+            <ArrowTooltip title='Home' placement='right'>
               <ListItem button className='font-awesome-icon'>
                 <ListItemIcon>
                   <FontAwesomeIcon icon='home' size='2x' />
                 </ListItemIcon>
                 <ListItemText primary='Home' />
               </ListItem>
-            </Link>
-          </ArrowTooltip>
+            </ArrowTooltip>
+          </Link>
           <Divider />
-          <ArrowTooltip title='Manage Salesmen' placement='right'>
-            <Link to='/ioms/manage/salesmen/'>
+          <Link to='/ioms/manage/inventory/'>
+            <ArrowTooltip title='Manage Inventory' placement='right'>
+              <ListItem button className='material-ui-icon'>
+                <ListItemIcon>
+                  <FontAwesomeIcon icon='file-signature' size='2x' />
+                </ListItemIcon>
+                <ListItemText primary='Manage Inventory' />
+              </ListItem>
+            </ArrowTooltip>
+          </Link>
+          <Divider />
+          <Link to='/ioms/manage/salesmen/'>
+            <ArrowTooltip title='Manage Salesmen' placement='right'>
               <ListItem button className='material-ui-icon'>
                 <ListItemIcon>
                   <FontAwesomeIcon icon='users' size='2x' />
                 </ListItemIcon>
                 <ListItemText primary='Manage Salesmen' />
               </ListItem>
-            </Link>
-          </ArrowTooltip>
+            </ArrowTooltip>
+          </Link>
           <Divider />
-          <ArrowTooltip title='Manage Orders' placement='right'>
-            <Link to='/ioms/manage/orders/'>
+          <Link to='/ioms/manage/orders/'>
+            <ArrowTooltip title='Manage Orders' placement='right'>
               <ListItem button className='font-awesome-icon'>
                 <ListItemIcon>
                   <FontAwesomeIcon icon='images' size='2x' />
                 </ListItemIcon>
                 <ListItemText primary='Manage Orders' />
               </ListItem>
-            </Link>
-          </ArrowTooltip>
+            </ArrowTooltip>
+          </Link>
           <Divider />
-          <ArrowTooltip title='Reports' placement='right'>
-            <Link to='/ioms/reports/'>
+          <Link to='/ioms/reports/'>
+            <ArrowTooltip title='Reports' placement='right'>
               <ListItem button className='font-awesome-icon'>
                 <ListItemIcon>
                   <FontAwesomeIcon icon='book' size='2x' />
                 </ListItemIcon>
                 <ListItemText primary='Reports' />
               </ListItem>
-            </Link>
-          </ArrowTooltip>
+            </ArrowTooltip>
+          </Link>
         </List>
       </Drawer>
     );

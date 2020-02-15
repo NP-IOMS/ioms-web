@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import loginImg from '../../images/home.png';
-import '../../Styles/Login.scss';
+import '../../styles/Login.scss';
 import LoginController from '../../server/controllers/LoginController';
 
 const _ = require('lodash');
@@ -25,11 +25,7 @@ export default class Login extends Component {
 
   handleOnSubmit = elem => {
     elem.preventDefault();
-    if (this.validateSignIn()) {
-      // console.log('Valid user');
-    } else {
-      // console.log('InValid user');
-    }
+    this.validateSignIn();
   };
 
   async validateSignIn() {
@@ -52,12 +48,19 @@ export default class Login extends Component {
       if (_.isEmpty(resp)) {
         this.showValidationError('login', 'Invalid credentials..!!');
         valid = false;
+      } else if (resp === 'error') {
+        this.showValidationError(
+          'login',
+          'Some internal issue occured, please try later..!!'
+        );
+        valid = false;
       } else {
         this.setState({
           username: this.state.username,
           password: this.state.password,
           errors: [],
           user: {
+            userId: resp[0].id,
             userAccountName: resp[0].userAccountName,
             userRoleId: resp[0].userRole.id,
             userRoleName: resp[0].userRole.userRoleName
@@ -70,7 +73,11 @@ export default class Login extends Component {
   }
 
   routeChange = () => {
-    this.props.history.push('/ioms/home/', this.state);
+    if(this.state.user.userRoleName === 'ADMIN') {
+      this.props.history.push('/ioms/home/', this.state.user);
+    } else {
+      alert('You are not an authorized user!!');
+    }
   };
 
   async authenticateUser(userName, userPass) {

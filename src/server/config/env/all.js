@@ -14,6 +14,15 @@ module.exports = {
   isAWSEnvironment: false,
   preferClusterMode: true,
   endpoints: {
-    login: 'http://localhost:8090/api/v1/login'
-  }
+    login: 'http://localhost:8090/api/v1/login',
+    userRole: 'http://localhost:8090/api/v1/user-role',
+    createUser: 'http://localhost:8090/api/v1/users/create',
+    editUser: 'http://localhost:8090/api/v1/users/update',
+    allUsersByRole: 'http://localhost:8090/api/v1/users/role/',
+    allInventory: 'http://localhost:8090/api/v1/inventory',
+    createInventory: 'http://localhost:8090/api/v1/inventory/create',
+    editInventory: 'http://localhost:8090/api/v1/inventory/update',
+    deleteInventory: 'http://localhost:8090/api/v1/inventory/delete/',
+  },
+  defaultUserPassword: 'password',
 };

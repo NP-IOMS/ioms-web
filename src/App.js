@@ -17,7 +17,7 @@ import {
   faUserEdit,
   faUserFriends
 } from '@fortawesome/free-solid-svg-icons';
-import './Styles/App.css';
+import './styles/App.css';
 import MainApp from './MainApp';
 
 // Import fonts required

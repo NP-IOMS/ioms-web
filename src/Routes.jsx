@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import './Styles/MainBody.scss';
+import './styles/MainBody.scss';
 import { Paper } from '@material-ui/core';
 
 import HomePage from './components/homepage/homepage';
+import ManageInventoryPage from './components/order/manageInventory';
 import ManageSalesmenPage from './components/salesmen/manageSalesmen';
 import ManageOrdersPage from './components/order/manageOrders';
 import ReprotsPage from './components/reports/report';
@@ -15,6 +16,11 @@ export default class Routes extends Component {
         <Paper className='main-body-container'>
           <Switch>
             <Route component={HomePage} exact path='/ioms/home/' />
+            <Route
+              component={ManageInventoryPage}
+              exact
+              path='/ioms/manage/inventory/'
+            />
             <Route
               component={ManageSalesmenPage}
               exact

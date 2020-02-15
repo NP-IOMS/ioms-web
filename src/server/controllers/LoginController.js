@@ -21,10 +21,15 @@ const LoginController = {
       },
       body: JSON.stringify(reqBody)
     };
+    let finalResult = 'error';
+    try {
+      const result = await fetch(url, OPTIONS);
+      finalResult = await result.json();
+      console.log('finalResult : ' + JSON.stringify(finalResult));
+    } catch (error) {
+      console.log('error in authentication : ' + error);
+    }
 
-    const result = await fetch(url, OPTIONS);
-    const finalResult = await result.json();
-    console.log('finalResult : ' + JSON.stringify(finalResult));
     return finalResult;
   }
 };

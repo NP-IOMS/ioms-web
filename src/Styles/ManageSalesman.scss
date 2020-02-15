@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+.container {
+  width: 100%;
+  float: left;
+}
+
+.create-salesman-container {
+  box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+  width: 48%;
+  float: left;
+  margin: 0.5em;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.show-salesman-container {
+  box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+  width: 48%;
+  float: right;
+  margin: 0.5em;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.salesman-textfield {
+  width: 60% !important;
+}
+
+.salesman-textarea {
+  width: 80% !important;
+  margin-top: 16px !important;
+}
+
+.create-salesman-header {
+  margin-left: -1.2em;
+  margin-top: -0.5em;
+  border-radius: 4px;
+  width: 105%;
+  text-align: center;
+  color: #fff;
+  background-image: linear-gradient(to right, #1565c0, #a5c9f2);
+}
+
+.btn-primary-salesman {
+  margin: 10px !important;
+}
+
+.danger-error {
+  display: inherit;
+  color: red;
+  font-size: 16px;
+}
+
+.quickFilter {
+  margin-bottom: 5px;
+}
+
+.ag-header-container {
+  background-color: #f0ffff;
+  font-size: 14px;
+}
+
+.salesmanDetailsTable {
+  width: 100%;
+  height: 430px;
+}
+
+@media (max-width: 800px) {
+  .show-salesman-container {
+    float: left !important;
+    width: 100%;
+  }
+
+  .salesmanDetailsTable {
+    height: 270px;
+  }
+
+  .create-salesman-container {
+    width: 100%;
+  }
+}

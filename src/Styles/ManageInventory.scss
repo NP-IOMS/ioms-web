@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+.MuiToolbar-regular {
+  color: #fff;
+  background-image: linear-gradient(to right, #1565c0, #a5c9f2);
+  border-radius: 4px 4px 0px 0px;
+  min-height: 30px;
+}
+
+.MuiTable-root {
+  margin-top: 10px;
+}
+
+.MuiTable-root th {
+  background-color: #f0ffff;
+  font-size: 16px;
+}
+
+.MuiTablePagination-toolbar {
+  background-color: #fff;
+  background-image: linear-gradient(to right, #fff, #fff);
+  color: #000;
+}
+
+@media (min-width: 600px) {
+  .MuiToolbar-regular {
+    min-height: 30px !important;
+  }
+}

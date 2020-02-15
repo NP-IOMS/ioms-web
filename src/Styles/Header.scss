@@ -1,73 +1,93 @@
-
 .site-header-container {
-    header {
-        background-image: linear-gradient(to right, #293348 , #1565c0);
-        z-index: 1201;
+  header {
+    background-image: linear-gradient(to right, #293348, #1565c0);
+    z-index: 1201;
+  }
+
+  .toolbar {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  @media (max-width: 600px) {
+    .toolbar {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .title {
+      display: none;
     }
 
-    .toolbar {
-        padding-left: 15px;
-        padding-right: 15px;
+    .titleSmall {
+      display: block !important;
+    }
+  }
+
+  .menu-button {
+    padding: 12px 5px;
+  }
+
+  .title {
+    flex-grow: 6;
+    margin-right: 5px;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  .titleSmall {
+    display: none;
+    flex-grow: 6;
+    margin-right: 5px;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  .global-search-container {
+    border-radius: 3px;
+    background-color: white;
+    width: auto;
+    flex-grow: 1;
+  }
+
+  .search-input {
+    padding: 2px 5px;
+    width: 100%;
+    height: 35px;
+    color: #90a4ae;
+    text-transform: none;
+    font-size: 1rem;
+
+    &.has-search-string {
+      color: black;
+    }
+
+    .search-icon {
+      margin-right: 5px;
+    }
+
+    .MuiButton-label {
+      justify-content: left;
     }
 
     @media (max-width: 600px) {
-        .toolbar {
-            padding-left: 10px;
-            padding-right: 10px;
-        }
+      .search-instructions {
+        display: none;
+      }
     }
+  }
 
-    .menu-button {
-        padding: 12px 5px;
+  .account-notification-container {
+    button {
+      padding: 5px;
     }
-
-    .title {
-        flex-grow: 6;
-        margin-right: 5px;
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-    }
-
-    .global-search-container {
-        border-radius: 3px;
-        background-color: white;
-        width: auto;
-        flex-grow: 1;
-    }
-
-    .search-input {
-        padding: 2px 5px;
-        width: 100%;
-        height: 35px;
-        color: #90a4ae;
-        text-transform: none;
-        font-size: 1rem;
-
-        &.has-search-string {
-            color: black;
-        }
-
-        .search-icon {
-            margin-right: 5px;
-        }
-
-        .MuiButton-label {
-            justify-content: left;
-        }
-
-        @media (max-width: 600px) {
-            .search-instructions {
-                display: none;
-            }
-        }
-    }
-
-    .account-notification-container {
-        button {
-            padding: 5px;
-        }
-    }
+  }
 }

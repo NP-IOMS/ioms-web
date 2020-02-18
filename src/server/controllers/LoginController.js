@@ -25,7 +25,7 @@ const LoginController = {
     try {
       const result = await fetch(url, OPTIONS);
       finalResult = await result.json();
-      console.log('finalResult : ' + JSON.stringify(finalResult));
+      // console.log('finalResult : ' + JSON.stringify(finalResult));
     } catch (error) {
       console.log('error in authentication : ' + error);
     }

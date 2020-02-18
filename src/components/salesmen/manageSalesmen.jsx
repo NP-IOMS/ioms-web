@@ -12,6 +12,7 @@ import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '@ag-grid-community/all-modules/dist/styles/ag-theme-balham.css';
+import Auth from "../../Auth";
 
 export default class ManageSalesmen extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export default class ManageSalesmen extends Component {
           headerName: 'Mobile Number',
           field: 'userMobileNumber',
           sortable: true,
-          width: 120
+          width: 130
         },
         {
           headerName: 'Monthly Target',
@@ -63,17 +64,20 @@ export default class ManageSalesmen extends Component {
   }
 
   async componentDidMount() {
-    if (this.state.smUserRoleId === '') {
-      const userRoleId = await ManageUserController.fetchUserRoles('SALESMAN');
-      if (userRoleId === 'error') {
-      } else {
-        this.setState({
-          smUserRoleId: userRoleId
-        });
+    if(Auth.isAuthenticated()) {
+      if (this.state.smUserRoleId === '') {
+        const userRoleId = await ManageUserController.fetchUserRoles('SALESMAN');
+        if (userRoleId === 'error') {
+        } else {
+          this.setState({
+            smUserRoleId: userRoleId
+          });
+        }
       }
+      this.fetchAllSalesmen();
+    } else {
+      this.props.history.push('/');
     }
-
-    this.fetchAllSalesmen();
   }
 
   async fetchAllSalesmen() {

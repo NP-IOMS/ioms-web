@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import loginImg from '../../images/home.png';
 import '../../styles/Login.scss';
 import LoginController from '../../server/controllers/LoginController';
+import Auth from '../../Auth';
 
 const _ = require('lodash');
 
@@ -14,6 +15,11 @@ export default class Login extends Component {
       errors: [],
       user: {}
     };
+  }
+  componentDidMount() {
+    if(Auth.isAuthenticated()) {
+      Auth.logout(() => {return '';});
+    }
   }
 
   handleChange = elem => {
@@ -57,7 +63,6 @@ export default class Login extends Component {
       } else {
         this.setState({
           username: this.state.username,
-          password: this.state.password,
           errors: [],
           user: {
             userId: resp[0].id,
@@ -74,7 +79,9 @@ export default class Login extends Component {
 
   routeChange = () => {
     if(this.state.user.userRoleName === 'ADMIN') {
-      this.props.history.push('/ioms/home/', this.state.user);
+      Auth.login(() => {
+        this.props.history.push('/ioms/home/');
+      });
     } else {
       alert('You are not an authorized user!!');
     }

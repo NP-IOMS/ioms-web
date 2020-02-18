@@ -2,34 +2,71 @@ import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 import '../../styles/ManageInventory.scss';
 import ManageInventoryController from '../../server/controllers/ManageInventoryController';
+import Auth from "../../Auth";
 
 export default class ManageInventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
       inventoryHeader: [
-        { title: 'Inventory Name', field: 'inventoryName' },
-        { title: 'Inventory Description', field: 'inventoryDesc' },
-        { title: 'Price (INR)', field: 'inventoryPrice', type: 'numeric' },
-        { title: 'GST Rate', field: 'inventoryGstRate', type: 'numeric' },
+        {
+          title: 'Inventory Name',
+          field: 'inventoryName',
+          cellStyle: { width: '10%', textAlign: 'left' },
+          headerStyle: { width: '10%', textAlign: 'left' }
+        },
+        {
+          title: 'Inventory Description',
+          field: 'inventoryDesc',
+          cellStyle: { width: '30%', textAlign: 'left' },
+          headerStyle: { width: '30%', textAlign: 'left' }
+        },
+        {
+          title: 'Price (INR)',
+          field: 'inventoryPrice',
+          type: 'numeric',
+          cellStyle: { width: '10%', textAlign: 'center' },
+          headerStyle: { width: '10%', textAlign: 'center' }
+        },
+        {
+          title: 'GST Rate',
+          field: 'inventoryGstRate',
+          type: 'numeric',
+          cellStyle: { width: '10%', textAlign: 'center' },
+          headerStyle: { width: '10%', textAlign: 'center' }
+        },
         {
           title: 'Status',
           field: 'inventoryStatus',
-          lookup: { 'true': 'Active', 'false': 'Inactive' }
+          lookup: { true: 'Active', false: 'Inactive' },
+          cellStyle: { width: '10%', textAlign: 'left' },
+          headerStyle: { width: '10%', textAlign: 'left' }
         },
         {
           title: 'Available Stock',
           field: 'inventoryAvlStock',
-          type: 'numeric'
+          type: 'numeric',
+          cellStyle: { width: '10%', textAlign: 'center' },
+          headerStyle: { width: '10%', textAlign: 'center' }
         },
-        { title: 'Add Stock', field: 'inventoryAddStock', type: 'numeric' }
+        {
+          title: 'Add Stock',
+          field: 'inventoryAddStock',
+          type: 'numeric',
+          cellStyle: { width: '10%', textAlign: 'center' },
+          headerStyle: { width: '10%', textAlign: 'center' }
+        }
       ],
       inventoryRowData: []
     };
   }
 
   async componentDidMount() {
-    this.fetchAllInventory();
+    if(Auth.isAuthenticated()) {
+      this.fetchAllInventory();
+    } else {
+      this.props.history.push('/');
+    }
   }
 
   async fetchAllInventory() {
@@ -38,8 +75,10 @@ export default class ManageInventory extends Component {
   }
 
   inventoryUpdate = async (inventoryData, action) => {
-    console.log(JSON.stringify(inventoryData));
-    const result = await ManageInventoryController.updateInventory(inventoryData, action);
+    const result = await ManageInventoryController.updateInventory(
+      inventoryData,
+      action
+    );
     let alertMsg = 'New inventory added successfully!!';
     if (action === 'edit') {
       alertMsg = 'Inventory updated successfully!!';
@@ -51,9 +90,11 @@ export default class ManageInventory extends Component {
       this.fetchAllInventory();
       alert(alertMsg);
     } else {
-      alert('Internal error while adding a new inventory, please contact support!!');
+      alert(
+        'Internal error while adding a new inventory, please contact support!!'
+      );
     }
-  }
+  };
 
   render() {
     return (
@@ -67,8 +108,8 @@ export default class ManageInventory extends Component {
               setTimeout(() => {
                 this.inventoryUpdate(newData, 'create');
                 resolve();
-              }, 600);})
-          ,
+              }, 600);
+            }),
           onRowUpdate: (newData, oldData) =>
             new Promise(resolve => {
               setTimeout(() => {
@@ -85,6 +126,9 @@ export default class ManageInventory extends Component {
                 resolve();
               }, 600);
             })
+        }}
+        options={{
+          exportButton: true
         }}
       />
     );

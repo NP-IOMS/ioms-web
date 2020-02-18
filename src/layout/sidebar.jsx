@@ -57,7 +57,7 @@ export default class Sidebar extends Component {
             </ArrowTooltip>
           </Link>
           <Divider />
-          <Link to='/ioms/manage/orders/'>
+{/*          <Link to='/ioms/manage/orders/'>
             <ArrowTooltip title='Manage Orders' placement='right'>
               <ListItem button className='font-awesome-icon'>
                 <ListItemIcon>
@@ -67,7 +67,7 @@ export default class Sidebar extends Component {
               </ListItem>
             </ArrowTooltip>
           </Link>
-          <Divider />
+          <Divider />*/}
           <Link to='/ioms/reports/'>
             <ArrowTooltip title='Reports' placement='right'>
               <ListItem button className='font-awesome-icon'>

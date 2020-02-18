@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+.ordersContainer {
+  width: 100%;
+  float: left;
+  padding: 2px;
+}
+.pendingOrders {
+  width: 49%;
+  float: left;
+  margin-right: 10px;
+}
+
+.dispatchedOrders {
+  width: 49%;
+  float: left;
+}
+
+.orderDetails {
+  width: 80%;
+  float: right;
+  margin-right: 0.2em;
+
+  .MuiTableFooter-root,
+  .MuiToolbar-root,
+  .MuiToolbar-regular,
+  .MTableToolbar-root,
+  .MuiToolbar-gutters {
+    display: none!important;
+  }
+
+  .MuiTable-root th {
+    background-color: #e1ecf7;
+    font-size: 14px!important;
+  }
+
+  .MuiTable-root {
+    margin-top: -1px;
+  }
+
+  .MuiTableCell-root {
+    padding: 10px;
+  }
+}

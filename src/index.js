@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './App';
+import ProtectedRoute from './ProtectedRoute';
 
 import store from './redux/store';
 import Loginpage from './components/login/loginpage';
@@ -12,10 +13,11 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route path='/ioms/*'>
+        <ProtectedRoute path='/ioms/*'>
           <App />
-        </Route>
-        <Route component={Loginpage} path='/' />
+        </ProtectedRoute>
+        <Route extract path='/' component={Loginpage} />
+        <Route extract path='*' component={() => '404 Not Found'} />
       </Switch>
     </BrowserRouter>
   </Provider>,

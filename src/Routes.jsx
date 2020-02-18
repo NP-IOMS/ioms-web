@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import './styles/MainBody.scss';
 import { Paper } from '@material-ui/core';
 
-import HomePage from './components/homepage/homepage';
+// import HomePage from './components/homepage/homepage';
 import ManageInventoryPage from './components/order/manageInventory';
 import ManageSalesmenPage from './components/salesmen/manageSalesmen';
 import ManageOrdersPage from './components/order/manageOrders';
-import ReprotsPage from './components/reports/report';
+import ReportsPage from './components/reports/report';
+import ProtectedRoute from './ProtectedRoute';
 
 export default class Routes extends Component {
   render() {
@@ -15,23 +16,28 @@ export default class Routes extends Component {
       <main className='main-body'>
         <Paper className='main-body-container'>
           <Switch>
-            <Route component={HomePage} exact path='/ioms/home/' />
-            <Route
+            {/*<ProtectedRoute component={HomePage} exact path='/ioms/home/' />*/}
+            <ProtectedRoute
               component={ManageInventoryPage}
               exact
               path='/ioms/manage/inventory/'
             />
-            <Route
+            <ProtectedRoute
               component={ManageSalesmenPage}
               exact
               path='/ioms/manage/salesmen/'
             />
-            <Route
+            <ProtectedRoute
               component={ManageOrdersPage}
               exact
-              path='/ioms/manage/orders/'
+              path='/ioms/home/'
             />
-            <Route component={ReprotsPage} exact path='/ioms/reports/' />
+            <ProtectedRoute
+              component={ReportsPage}
+              exact
+              path='/ioms/reports/'
+            />
+            <Route extract path='*' component={() => '404 Not Found'} />
           </Switch>
         </Paper>
       </main>

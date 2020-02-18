@@ -35,6 +35,7 @@ const ManageInventoryController = {
                 inventory.inventoryStatus = tempInventory.status;
                 inventory.inventoryAvlStock = tempInventory.availableStock;
                 inventory.inventoryAddStock = '0';
+                inventory.createdOn = tempInventory.createdOn;
                 inventory.inventoryId = tempInventory.id;
                 allInventory.push(inventory);
             }
@@ -49,8 +50,8 @@ const ManageInventoryController = {
         let url = '';
         let httpMethodType = 'POST';
         let inventoryId = '';
-        console.log("newInventoryData  :: "+JSON.stringify(newInventoryData));
-        console.log("action  :: "+action);
+        // console.log("newInventoryData  :: "+JSON.stringify(newInventoryData));
+        // console.log("action  :: "+action);
         if (action === 'create') {
             url = `${inventoryApiConfig.createInventoryEndPoint}`;
         } else if (action === 'edit'){
@@ -76,9 +77,10 @@ const ManageInventoryController = {
             gstRate: `${newInventoryData.inventoryGstRate}`,
             status: `${newInventoryData.inventoryStatus}`,
             availableStock: newStock,
-            createdOn: `${currentTime}`,
+            createdOn: `${newInventoryData.createdOn}`,
+            modifiedOn: `${currentTime}`,
         };
-        console.log("reqBody  :: "+JSON.stringify(reqBody));
+        // console.log("reqBody  :: "+JSON.stringify(reqBody));
 
         const OPTIONS = {
             method: httpMethodType,

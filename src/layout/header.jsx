@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import Auth from '../Auth';
 
 import {
   AppBar,
@@ -9,30 +10,14 @@ import {
   Grid
 } from '@material-ui/core';
 import {
-  AccountCircle,
+  ExitToApp,
   KeyboardBackspaceRounded,
   MenuRounded
 } from '@material-ui/icons';
 
 import '../styles/Header.scss';
 
-export default class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errors: [],
-      user: {}
-    };
-  }
-
-  componentDidMount() {
-    // if(this.props.location && this.props.location.state && this.props.location.state.user) {
-    //   this.state.user = this.props.location.state.user;
-    // } else {
-    //   this.props.history.push('/');
-    // }
-  }
-
+class Header extends Component {
   render() {
     const { open, onOpen, onClose } = this.props;
     return (
@@ -91,11 +76,15 @@ export default class Header extends Component {
                   <Grid item>
                     <IconButton
                       aria-label='Sign Out'
-                      // onClick={handleMobileMenuOpen}
+                      onClick={() => {
+                        Auth.logout(() => {
+                          this.props.history.push('/');
+                        });
+                      }}
                       color='inherit'
                       tooltip={'Sign Out'}
                     >
-                      <AccountCircle />
+                      <ExitToApp />
                     </IconButton>
                   </Grid>
                 </Grid>
@@ -107,3 +96,5 @@ export default class Header extends Component {
     );
   }
 }
+
+export default withRouter(Header);

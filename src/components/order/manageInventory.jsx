@@ -3,11 +3,14 @@ import MaterialTable from 'material-table';
 import '../../styles/ManageInventory.scss';
 import ManageInventoryController from '../../server/controllers/ManageInventoryController';
 import Auth from "../../Auth";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 
 export default class ManageInventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      openDialog: false,
+      dialogMessage: 'New inventory added successfully!!',
       inventoryHeader: [
         {
           title: 'Inventory Name',
@@ -61,6 +64,10 @@ export default class ManageInventory extends Component {
     };
   }
 
+  handleDialogClose = () => {
+    this.setState({openDialog: false});
+  };
+
   async componentDidMount() {
     if(Auth.isAuthenticated()) {
       this.fetchAllInventory();
@@ -79,58 +86,76 @@ export default class ManageInventory extends Component {
       inventoryData,
       action
     );
-    let alertMsg = 'New inventory added successfully!!';
+
     if (action === 'edit') {
-      alertMsg = 'Inventory updated successfully!!';
+      this.setState({dialogMessage: 'Inventory updated successfully!!'});
     } else if (action === 'delete') {
-      alertMsg = 'Inventory deleted successfully!!';
+      this.setState({dialogMessage: 'Inventory deleted successfully!!'});
     }
 
     if (result === 'success') {
+      this.setState({openDialog: true});
       this.fetchAllInventory();
-      alert(alertMsg);
     } else {
-      alert(
-        'Internal error while adding a new inventory, please contact support!!'
-      );
+      this.setState({dialogMessage: 'Internal error while adding a new inventory, please contact support!!'});
     }
   };
 
   render() {
     return (
-      <MaterialTable
-        title='Manage Inventory'
-        columns={this.state.inventoryHeader}
-        data={this.state.inventoryRowData}
-        editable={{
-          onRowAdd: newData =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                this.inventoryUpdate(newData, 'create');
-                resolve();
-              }, 600);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                if (oldData) {
-                  this.inventoryUpdate(newData, 'edit');
-                }
-                resolve();
-              }, 600);
-            }),
-          onRowDelete: oldData =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                this.inventoryUpdate(oldData, 'delete');
-                resolve();
-              }, 600);
-            })
-        }}
-        options={{
-          exportButton: true
-        }}
-      />
+        <div>
+          <Dialog
+              open={this.state.openDialog}
+              onClose={this.handleDialogClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{""}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {this.state.dialogMessage}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleDialogClose} color="primary" autoFocus>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <MaterialTable
+              title='Manage Inventory'
+              columns={this.state.inventoryHeader}
+              data={this.state.inventoryRowData}
+              editable={{
+                onRowAdd: newData =>
+                    new Promise(resolve => {
+                      setTimeout(() => {
+                        this.inventoryUpdate(newData, 'create');
+                        resolve();
+                      }, 600);
+                    }),
+                onRowUpdate: (newData, oldData) =>
+                    new Promise(resolve => {
+                      setTimeout(() => {
+                        if (oldData) {
+                          this.inventoryUpdate(newData, 'edit');
+                        }
+                        resolve();
+                      }, 600);
+                    }),
+                onRowDelete: oldData =>
+                    new Promise(resolve => {
+                      setTimeout(() => {
+                        this.inventoryUpdate(oldData, 'delete');
+                        resolve();
+                      }, 600);
+                    })
+              }}
+              options={{
+                exportButton: true
+              }}
+          />
+        </div>
     );
   }
 }

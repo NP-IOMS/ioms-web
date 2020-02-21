@@ -3,11 +3,14 @@ import MaterialTable from 'material-table';
 import '../../styles/ManageOrders.scss';
 import ManageOrdersController from '../../server/controllers/ManageOrdersController';
 import Auth from "../../Auth";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 
 export default class ManageOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      openDialog: false,
+      dialogMessage: 'Order updated successfully!!',
       orderHeader: [
         {
           title: 'Order Number',
@@ -95,26 +98,45 @@ export default class ManageOrder extends Component {
     this.setState({ dispatchedOrderHeaderRowData: allOrders.dispatchedOrders });
   }
 
+  handleDialogClose = () => {
+    this.setState({openDialog: false});
+  };
+
   orderUpdate = async (orderData, action) => {
     // console.log(JSON.stringify(orderData));
 
     let result = await ManageOrdersController.updateOrder(orderData);
 
-    let alertMsg = 'Order updated successfully!!';
-
     if (result === 'success') {
-      this.fetchAllPendingOrders();
-      alert(alertMsg);
+      this.fetchAllOrders();
+      this.setState({openDialog: true});
     } else {
-      alert(
-        'Internal error while adding a new inventory, please contact support!!'
-      );
+      this.setState({dialogMessage: 'Internal error while adding a Salesman, please contact support!!'});
     }
   };
 
   render() {
     return (
       <div className='ordersContainer'>
+        <Dialog
+            open={this.state.openDialog}
+            onClose={this.handleDialogClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{""}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {this.state.dialogMessage}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color="primary" autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <div className='pendingOrders'>
           <MaterialTable
             title='Pending Orders'

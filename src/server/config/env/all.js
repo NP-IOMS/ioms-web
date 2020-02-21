@@ -25,6 +25,7 @@ module.exports = {
     deleteInventory: 'http://localhost:8090/api/v1/inventory/delete/',
     allPendingOrders: 'http://localhost:8090/api/v1/orders/status',
     updateOrder: 'http://localhost:8090/api/v1/order/header/update',
+    reportOrder: 'http://localhost:8090/api/v1/reports/order'
   },
-  defaultUserPassword: 'password',
+  defaultUserPassword: 'password'
 };

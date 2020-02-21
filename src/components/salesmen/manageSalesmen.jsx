@@ -3,7 +3,12 @@ import {
   Typography,
   TextField,
   Button,
-  InputAdornment
+  InputAdornment,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@material-ui/core';
 import SearchSharp from '@material-ui/icons/SearchSharp';
 import '../../styles/ManageSalesman.scss';
@@ -12,12 +17,14 @@ import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '@ag-grid-community/all-modules/dist/styles/ag-theme-balham.css';
-import Auth from "../../Auth";
+import Auth from '../../Auth';
 
 export default class ManageSalesmen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      openDialog: false,
+      dialogMessage: '',
       modules: AllCommunityModules,
       smId: '',
       smFullName: '',
@@ -63,10 +70,16 @@ export default class ManageSalesmen extends Component {
     };
   }
 
+  handleDialogClose = () => {
+    this.setState({ openDialog: false });
+  };
+
   async componentDidMount() {
-    if(Auth.isAuthenticated()) {
+    if (Auth.isAuthenticated()) {
       if (this.state.smUserRoleId === '') {
-        const userRoleId = await ManageUserController.fetchUserRoles('SALESMAN');
+        const userRoleId = await ManageUserController.fetchUserRoles(
+          'SALESMAN'
+        );
         if (userRoleId === 'error') {
         } else {
           this.setState({
@@ -142,13 +155,20 @@ export default class ManageSalesmen extends Component {
       );
 
       if (result === 'success') {
-        alert('Salesman added successfully!!');
+        if (this.state.createBtnAction === 'create') {
+          this.setState({ dialogMessage: 'Salesman added successfully!!' });
+        } else {
+          this.setState({ dialogMessage: 'Salesman updated successfully!!' });
+        }
+
+        this.setState({ openDialog: true });
         this.fetchAllSalesmen();
         this.handleResetSalesman();
       } else {
-        alert(
-          'Internal error while adding a Salesman, please contact support!!'
-        );
+        this.setState({
+          dialogMessage:
+            'Internal error while adding a Salesman, please contact support!!'
+        });
       }
     } else {
       return false;
@@ -235,18 +255,21 @@ export default class ManageSalesmen extends Component {
 
   onSelectionChanged() {
     let selectedRows = this.gridApi.getSelectedRows();
+    if (selectedRows && selectedRows.length > 0) {
+      this.setState({
+        smMobileNumber: selectedRows[0].userMobileNumber,
+        smFullName: selectedRows[0].userAccountName,
+        smAddress: selectedRows[0].userAddress,
+        smMonthlyTarget: selectedRows[0].userMonthlyTarget,
+        createBtnText: 'Edit Salesman',
+        createBtnAction: 'edit',
+        smId: selectedRows[0].userId
+      });
 
-    this.setState({
-      smMobileNumber: selectedRows[0].userMobileNumber,
-      smFullName: selectedRows[0].userAccountName,
-      smAddress: selectedRows[0].userAddress,
-      smMonthlyTarget: selectedRows[0].userMonthlyTarget,
-      createBtnText: 'Edit Salesman',
-      createBtnAction: 'edit',
-      smId: selectedRows[0].userId
-    });
-
-    this.clearAllValidationError();
+      this.clearAllValidationError();
+    } else {
+      this.handleResetSalesman();
+    }
   }
 
   render() {
@@ -272,6 +295,25 @@ export default class ManageSalesmen extends Component {
 
     return (
       <div className='container'>
+        <Dialog
+          open={this.state.openDialog}
+          onClose={this.handleDialogClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{''}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              {this.state.dialogMessage}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color='primary' autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <div className='show-salesman-container'>
           <div className='create-salesman-header'>
             <Typography variant='h6' component='h2'>

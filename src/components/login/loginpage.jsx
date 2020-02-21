@@ -11,14 +11,16 @@ export default class Login extends Component {
     super(props);
     this.state = {
       username: '',
-      password: '',
+      pass: '',
       errors: [],
       user: {}
     };
   }
   componentDidMount() {
-    if(Auth.isAuthenticated()) {
-      Auth.logout(() => {return '';});
+    if (Auth.isAuthenticated()) {
+      Auth.logout(() => {
+        return '';
+      });
     }
   }
 
@@ -40,15 +42,15 @@ export default class Login extends Component {
       this.showValidationError('username', 'username can not be empty!');
       valid = false;
     }
-    if (this.state.password === '') {
-      this.showValidationError('password', 'password can not be empty!');
+    if (this.state.pass === '') {
+      this.showValidationError('pass', 'password can not be empty!');
       valid = false;
     }
 
     if (valid) {
       const resp = await this.authenticateUser(
         this.state.username,
-        this.state.password
+        this.state.pass
       );
 
       if (_.isEmpty(resp)) {
@@ -78,7 +80,8 @@ export default class Login extends Component {
   }
 
   routeChange = () => {
-    if(this.state.user.userRoleName === 'ADMIN') {
+    if (this.state.user.userRoleName === 'ADMIN') {
+      Auth.setUserInfo(this.state.user);
       Auth.login(() => {
         this.props.history.push('/ioms/home/');
       });
@@ -121,15 +124,15 @@ export default class Login extends Component {
 
   render() {
     let usernameErrMsg = null;
-    let passwordErrMsg = null;
+    let passErrMsg = null;
     let loginErrMsg = null;
 
     for (let err of this.state.errors) {
       if (err.elem === 'username') {
         usernameErrMsg = err.msg;
       }
-      if (err.elem === 'password') {
-        passwordErrMsg = err.msg;
+      if (err.elem === 'pass') {
+        passErrMsg = err.msg;
       }
       if (err.elem === 'login') {
         loginErrMsg = err.msg;
@@ -163,16 +166,16 @@ export default class Login extends Component {
                       </small>
                     </div>
                     <div className='form-group'>
-                      <label htmlFor='password'>Password</label>
+                      <label htmlFor='pass'>Password</label>
                       <input
                         type='password'
-                        id='password'
-                        name='password'
+                        id='pass'
+                        name='pass'
                         placeholder='password'
                         onChange={this.handleChange}
                       />
                       <small className='danger-error'>
-                        {passwordErrMsg ? passwordErrMsg : ''}
+                        {passErrMsg ? passErrMsg : ''}
                       </small>
                     </div>
                   </div>

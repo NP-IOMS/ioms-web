@@ -66,10 +66,10 @@ const ManageOrdersController = {
             let ordersDetails = [];
             for (let tempOrdersDetail of tempOrder.ordersDetails) {
                 let orderDetail = {};
-                orderDetail.inventoryName = tempOrdersDetail.inventory.inventoryName;
-                orderDetail.inventoryPrice = tempOrdersDetail.inventoryPrice;
+                orderDetail.productName = tempOrdersDetail.product.productName;
+                orderDetail.productPrice = tempOrdersDetail.productPrice;
                 orderDetail.gstRate = tempOrdersDetail.gstRate;
-                orderDetail.inventoryQty = tempOrdersDetail.inventoryQuantity;
+                orderDetail.productQty = tempOrdersDetail.productQuantity;
                 ordersDetails.push(orderDetail);
             }
             order.ordersDetails = ordersDetails;

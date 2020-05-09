@@ -27,7 +27,7 @@ export default class Sidebar extends Component {
             <Divider />
             <Link to='/ioms/home/'>
               <ArrowTooltip title='Home' placement='right'>
-                <ListItem button className='font-awesome-icon'>
+                <ListItem button className='font-awesome-icon menu-text'>
                   <ListItemIcon>
                     <FontAwesomeIcon icon='home' size='2x' />
                   </ListItemIcon>
@@ -36,33 +36,44 @@ export default class Sidebar extends Component {
               </ArrowTooltip>
             </Link>
             <Divider />
-            <Link to='/ioms/manage/inventory/'>
-              <ArrowTooltip title='Manage Inventory' placement='right'>
-                <ListItem button className='material-ui-icon'>
+            <Link to='/ioms/manage/product/category'>
+              <ArrowTooltip title='Manage Product Category' placement='right'>
+                <ListItem button className='material-ui-icon menu-text'>
                   <ListItemIcon>
                     <FontAwesomeIcon icon='file-signature' size='2x' />
                   </ListItemIcon>
-                  <ListItemText primary='Manage Inventory' />
+                  <ListItemText primary='Manage Product Category' />
                 </ListItem>
               </ArrowTooltip>
             </Link>
             <Divider />
-            <Link to='/ioms/manage/salesmen/'>
-              <ArrowTooltip title='Manage Salesmen' placement='right'>
-                <ListItem button className='material-ui-icon'>
+            <Link to='/ioms/manage/product/'>
+              <ArrowTooltip title='Manage Product' placement='right'>
+                <ListItem button className='material-ui-icon menu-text'>
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon='file-signature' size='2x' />
+                  </ListItemIcon>
+                  <ListItemText primary='Manage Product' />
+                </ListItem>
+              </ArrowTooltip>
+            </Link>
+            <Divider />
+            <Link to='/ioms/manage/user/'>
+              <ArrowTooltip title='Manage Users' placement='right'>
+                <ListItem button className='material-ui-icon menu-text'>
                   <ListItemIcon>
                     <FontAwesomeIcon icon='users' size='2x' />
                   </ListItemIcon>
-                  <ListItemText primary='Manage Salesmen' />
+                  <ListItemText primary='Manage Users'/>
                 </ListItem>
               </ArrowTooltip>
             </Link>
             <Divider />
             <Link to='/ioms/reports/'>
               <ArrowTooltip title='Reports' placement='right'>
-                <ListItem button className='font-awesome-icon'>
+                <ListItem button className='font-awesome-icon menu-text'>
                   <ListItemIcon>
-                    <FontAwesomeIcon icon='book' size='2x' />
+                    <FontAwesomeIcon icon='book' size='2x'/>
                   </ListItemIcon>
                   <ListItemText primary='Reports' />
                 </ListItem>

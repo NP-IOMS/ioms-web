@@ -6,7 +6,9 @@ const userApiConfig = {
   userRoleEndPoint: config.endpoints.userRole,
   createUserEndPoint: config.endpoints.createUser,
   editUserEndPoint: config.endpoints.editUser,
-  allUsersByRoleEndPoint: config.endpoints.allUsersByRole
+  allUsersByRoleEndPoint: config.endpoints.allUsersByRole,
+  createFileEndPoint: config.endpoints.createFile,
+  editFileEndPoint: config.endpoints.editFile
 };
 
 const ManageUserController = {
@@ -44,14 +46,22 @@ const ManageUserController = {
     userMobileNumber,
     userMonthlyTarget,
     userId,
-    action
+    action,
+    fileData,
+    fileName,
+    fileId
   ) {
     let url = '';
+    let fileProcessUrl = '';
     let httpMethodType = 'POST';
     if(action === 'create') {
+      userId = '';
+      fileId = '';
       url = `${userApiConfig.createUserEndPoint}`;
+      fileProcessUrl = `${userApiConfig.createFileEndPoint}`;
     } else {
       url = `${userApiConfig.editUserEndPoint}`;
+      fileProcessUrl = `${userApiConfig.editFileEndPoint}`;
       httpMethodType = 'PUT';
     }
 
@@ -59,21 +69,13 @@ const ManageUserController = {
 
     const currentTime = new Date().getTime();
 
-    const reqBody = {
-      id: `${userId}`,
-      userName: `${userName}`,
-      userPass: `${userPass}`,
-      userAccountName: `${userAccountName}`,
-      userAddress: `${userAddress}`,
-      userMobileNumber: `${userMobileNumber}`,
-      userMonthlyTarget: `${userMonthlyTarget}`,
-      createdOn: `${currentTime}`,
-      userRole: {
-        id: `${userRoleId}`
-      }
+    let reqBody = {
+        fileId: `${fileId}`,
+        fileName: `${fileName}`,
+        fileData: `${fileData}`
     };
 
-    const OPTIONS = {
+    let OPTIONS = {
       method: httpMethodType,
       headers: {
         'Content-Type': 'application/json'
@@ -82,18 +84,58 @@ const ManageUserController = {
     };
     let finalResult = 'error';
     try {
-      const result = await fetch(url, OPTIONS);
+      const result = await fetch(fileProcessUrl, OPTIONS);
       finalResult = await result.json();
-      //   console.log('finalResult : ' + JSON.stringify(finalResult));
+      // console.log('finalResult : ' + JSON.stringify(finalResult));
     } catch (error) {
       console.log(
-        `error in creating a user with roleId ${userRoleId} : ` + error
+          `error in creating a file for user : ` + error
       );
     }
-    if (!_.isEmpty(finalResult)) {
-      finalResult = 'success';
-    }
 
+    const newFile = finalResult;
+
+    if (finalResult === 'error' || finalResult.code) {
+      return 'error';
+    } else {
+      reqBody = {
+        id: `${userId}`,
+        userName: `${userName}`,
+        userPass: `${userPass}`,
+        userAccountName: `${userAccountName}`,
+        userAddress: `${userAddress}`,
+        userMobileNumber: `${userMobileNumber}`,
+        userMonthlyTarget: `${userMonthlyTarget}`,
+        createdOn: `${currentTime}`,
+        userRole: {
+          id: `${userRoleId}`
+        },
+        file: {
+          id: `${newFile.id}`
+        }
+      };
+
+      OPTIONS = {
+        method: httpMethodType,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reqBody)
+      };
+      finalResult = 'error';
+      try {
+        const result = await fetch(url, OPTIONS);
+        finalResult = await result.json();
+        //   console.log('finalResult : ' + JSON.stringify(finalResult));
+      } catch (error) {
+        console.log(
+            `error in creating a user with roleId ${userRoleId} : ` + error
+        );
+      }
+      if (!_.isEmpty(finalResult)) {
+        finalResult = 'success';
+      }
+    }
     return finalResult;
   },
 
@@ -120,6 +162,8 @@ const ManageUserController = {
         user.userMonthlyTarget = tempUser.userMonthlyTarget;
         user.userAddress = tempUser.userAddress;
         user.userId = tempUser.id;
+        user.userImage = tempUser.file.fileName;
+        user.userImageId = tempUser.file.id;
         allUsers.push(user);
       }
       return allUsers;

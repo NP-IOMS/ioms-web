@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+.MuiToolbar-regular {
+  color: #fff;
+  background-image: linear-gradient(to right, #1565c0, #a5c9f2);
+  border-radius: 4px 4px 0px 0px;
+  min-height: 30px;
+}
+
+.MuiTable-root {
+  margin-top: 10px;
+}
+
+.MuiTable-root th {
+  background-color: #f0ffff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.MuiTablePagination-toolbar {
+  background-color: #fff;
+  background-image: linear-gradient(to right, #fff, #fff);
+  color: #000;
+}
+
+.create-product-container {
+  box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+  width: 38%;
+  float: left;
+  margin: 0.5em;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.create-product-sub-container {
+  width: 100%;
+  float: left;
+}
+
+.create-product-header {
+  margin-left: -1.2em;
+  margin-top: -0.5em;
+  border-radius: 4px;
+  width: 105%;
+  text-align: center;
+  color: #fff;
+  background-image: linear-gradient(to right, #1565c0, #a5c9f2);
+}
+
+.show-product-container {
+  box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+  width: 58%;
+  float: right;
+  margin: 0.5em;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.danger-error {
+  display: inherit;
+  color: red;
+  font-size: 16px;
+}
+
+.btn-primary-product {
+  margin: 10px !important;
+}
+
+.formControl {
+  min-width: 100% !important;
+  margin-top: 20px !important;
+}
+
+.selectEmpty {
+  margin-top: 2px;
+}
+
+.image-div-container {
+  float: inherit;
+  small.danger-error {
+    margin-left: 0em;
+    margin-top: 3em;
+  }
+}
+
+.image-div-sub-container {
+  float: left;
+}
+
+.image-div-text {
+  float: left;
+  margin-left: 20px;
+  display: block;
+}
+
+.hide-display {
+  display: none;
+}
+
+.show-display {
+  display: block;
+}
+
+@media (min-width: 600px) {
+  .MuiToolbar-regular {
+    min-height: 30px !important;
+  }
+}

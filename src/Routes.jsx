@@ -4,9 +4,10 @@ import './styles/MainBody.scss';
 import { Paper } from '@material-ui/core';
 
 // import HomePage from './components/homepage/homepage';
-import ManageInventoryPage from './components/order/manageInventory';
-import ManageSalesmenPage from './components/salesmen/manageSalesmen';
+import ManageProductPage from './components/order/manageProduct';
+import ManageUsersPage from './components/users/manageUsers';
 import ManageOrdersPage from './components/order/manageOrders';
+import ManageProductCategory from "./components/order/manageProductCategory";
 import ReportsPage from './components/reports/report';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -18,14 +19,19 @@ export default class Routes extends Component {
           <Switch>
             {/*<ProtectedRoute component={HomePage} exact path='/ioms/home/' />*/}
             <ProtectedRoute
-              component={ManageInventoryPage}
-              exact
-              path='/ioms/manage/inventory/'
+                component={ManageProductCategory}
+                exact
+                path='/ioms/manage/product/category'
             />
             <ProtectedRoute
-              component={ManageSalesmenPage}
+              component={ManageProductPage}
               exact
-              path='/ioms/manage/salesmen/'
+              path='/ioms/manage/product/'
+            />
+            <ProtectedRoute
+              component={ManageUsersPage}
+              exact
+              path='/ioms/manage/user/'
             />
             <ProtectedRoute
               component={ManageOrdersPage}

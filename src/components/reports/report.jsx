@@ -100,26 +100,26 @@ export default function Reports() {
       cellStyle: { width: '8%', textAlign: 'center' }
     },
     {
-      title: 'Inventory Name',
-      field: 'inventoryName',
+      title: 'Product Name',
+      field: 'productName',
       headerStyle: { width: '8%', textAlign: 'center' },
       cellStyle: { width: '8%', textAlign: 'center' }
     },
     {
-      title: 'Inventory Price',
-      field: 'inventoryPrice',
+      title: 'Product Price',
+      field: 'productPrice',
       headerStyle: { width: '8%', textAlign: 'center' },
       cellStyle: { width: '8%', textAlign: 'center' }
     },
     {
-      title: 'Inventory Gst Rate',
-      field: 'inventoryGstRate',
+      title: 'Product Gst Rate',
+      field: 'productGstRate',
       headerStyle: { width: '8%', textAlign: 'center' },
       cellStyle: { width: '8%', textAlign: 'center' }
     },
     {
-      title: 'Inventory Quantity',
-      field: 'inventoryQuantity',
+      title: 'Product Quantity',
+      field: 'productQuantity',
       headerStyle: { width: '8%', textAlign: 'center' },
       cellStyle: { width: '8%', textAlign: 'center' }
     }
@@ -222,8 +222,8 @@ export default function Reports() {
                   <em>None</em>
                 </MenuItem>
                 <MenuItem value={1}>All Dispatched Orders</MenuItem>
-                <MenuItem value={2}>Inventory Details</MenuItem>
-                <MenuItem value={3}>Salesmen Details</MenuItem>
+                <MenuItem value={2}>Product Details</MenuItem>
+                <MenuItem value={3}>Users Details</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -266,7 +266,7 @@ export default function Reports() {
               id='createBtn'
               variant='contained'
               color='primary'
-              className='btn-primary-salesman'
+              className='btn-primary-users'
               onClick={handleGenerateReport}
             >
               Generate Report

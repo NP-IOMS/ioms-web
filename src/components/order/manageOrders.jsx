@@ -54,14 +54,14 @@ export default class ManageOrder extends Component {
       dispatchedOrderHeaderRowData: [],
       ordersDetailsHeader: [
         {
-          title: 'Inventory Name',
-          field: 'inventoryName',
+          title: 'Product Name',
+          field: 'productName',
           headerStyle: { width: '25%', textAlign: 'left' },
           cellStyle: { width: '25%', textAlign: 'left' }
         },
         {
-          title: 'Inventory Price',
-          field: 'inventoryPrice',
+          title: 'Product Price',
+          field: 'productPrice',
           type: 'numeric',
           headerStyle: { width: '25%', textAlign: 'center' },
           cellStyle: { width: '25%', textAlign: 'center' }
@@ -74,8 +74,8 @@ export default class ManageOrder extends Component {
           cellStyle: { width: '25%', textAlign: 'center' }
         },
         {
-          title: 'Inventory Quantity',
-          field: 'inventoryQty',
+          title: 'Product Quantity',
+          field: 'productQty',
           type: 'numeric',
           headerStyle: { width: '25%', textAlign: 'center' },
           cellStyle: { width: '25%', textAlign: 'center' }
@@ -94,8 +94,10 @@ export default class ManageOrder extends Component {
 
   async fetchAllOrders() {
     const allOrders = await ManageOrdersController.fetchAllOrders();
-    this.setState({ pendingOrderHeaderRowData: allOrders.pendingOrders });
-    this.setState({ dispatchedOrderHeaderRowData: allOrders.dispatchedOrders });
+    this.setState({
+      pendingOrderHeaderRowData: allOrders.pendingOrders,
+      dispatchedOrderHeaderRowData: allOrders.dispatchedOrders
+    });
   }
 
   handleDialogClose = () => {
@@ -111,7 +113,7 @@ export default class ManageOrder extends Component {
       this.fetchAllOrders();
       this.setState({openDialog: true});
     } else {
-      this.setState({dialogMessage: 'Internal error while adding a Salesman, please contact support!!'});
+      this.setState({dialogMessage: 'Internal error while adding a User, please contact support!!'});
     }
   };
 
@@ -160,7 +162,7 @@ export default class ManageOrder extends Component {
             actions={[
               {
                 icon: 'update',
-                tooltip: 'Update Order',
+                tooltip: 'Dispatch Order',
                 onClick: (event, rowData) => this.orderUpdate(rowData, 'save')
               }
             ]}

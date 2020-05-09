@@ -8,18 +8,19 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
 } from '@material-ui/core';
 import SearchSharp from '@material-ui/icons/SearchSharp';
-import '../../styles/ManageSalesman.scss';
+import '../../styles/ManageUsers.scss';
 import ManageUserController from '../../server/controllers/ManageUserController';
-import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '@ag-grid-community/all-modules/dist/styles/ag-theme-balham.css';
+import { DropzoneDialog } from 'material-ui-dropzone';
 import Auth from '../../Auth';
+import MaterialTable from 'material-table';
 
-export default class ManageSalesmen extends Component {
+export default class ManageUsers extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,45 +34,102 @@ export default class ManageSalesmen extends Component {
       smAddress: '',
       smUserRoleId: '',
       createBtnAction: 'create',
-      createBtnText: 'Create a Salesman',
+      createBtnText: 'Create a User',
       errors: [],
       user: {},
-      salesmenColumnsDef: [
+      openImage: false,
+      smImageFiles: [],
+      imageFileName: 'no image selected',
+      userImageId: 0,
+      imageId: '',
+      showImageWithLink: 'hide-display',
+      showImageWithoutLink: 'show-display',
+      usersColumnsDef: [
         {
-          headerName: 'Full Name',
+          title: 'Full Name',
           field: 'userAccountName',
-          sortable: true,
-          checkboxSelection: true,
-          width: 200,
-          suppressSizeToFit: true
+          cellStyle: { width: '25%', textAlign: 'left' },
+          headerStyle: { width: '25%', textAlign: 'left' },
         },
         {
-          headerName: 'Mobile Number',
+          title: 'Mobile Number',
           field: 'userMobileNumber',
-          sortable: true,
-          width: 130
+          type: 'numeric',
+          cellStyle: { width: '20%', textAlign: 'left' },
+          headerStyle: { width: '20%', textAlign: 'left' },
         },
         {
-          headerName: 'Monthly Target',
+          title: 'Monthly Target',
           field: 'userMonthlyTarget',
-          sortable: true,
-          width: 130
+          type: 'numeric',
+          cellStyle: { width: '10%', textAlign: 'left' },
+          headerStyle: { width: '10%', textAlign: 'left' },
         },
         {
-          headerName: 'Address',
+          title: 'Address',
           field: 'userAddress',
-          sortable: true,
-          width: 300
-        }
+          cellStyle: { width: '30%', textAlign: 'left' },
+          headerStyle: { width: '30%', textAlign: 'left' },
+        },
+        {
+          title: 'Image',
+          field: 'userImage',
+          cellStyle: { width: '15%', textAlign: 'left' },
+          headerStyle: { width: '15%', textAlign: 'left' },
+          // onClick
+        },
       ],
-      rowSelection: 'single',
-      defaultColDef: { resizable: true },
-      salesmenRowData: null
+      // rowSelection: 'single',
+      // defaultColDef: { resizable: true },
+      usersRowData: [],
     };
   }
 
   handleDialogClose = () => {
     this.setState({ openDialog: false });
+  };
+
+  downloadImage = () => {
+    const imageId = this.state.imageId;
+    const imageUrl = 'http://localhost:8010/api/v1/file/blob/' + imageId;
+    let base64ImageData = null;
+    const OPTIONS = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    };
+    fetch(imageUrl, OPTIONS)
+      .then((response) => response.text())
+      .then((response) => {
+        base64ImageData = response;
+        let imageType = this.state.imageFileName.split('.')[1];
+        if (imageType === 'jpg') {
+          imageType = 'jpeg';
+        }
+        const contentType = `image/${imageType}`;
+        const byteCharacters = atob(
+          base64ImageData.substr(`data:${contentType};base64,`.length)
+        );
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+          const slice = byteCharacters.slice(offset, offset + 1024);
+
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray = new Uint8Array(byteNumbers);
+
+          byteArrays.push(byteArray);
+        }
+        const blobImage = new Blob(byteArrays, { type: contentType });
+        const blobUrl = URL.createObjectURL(blobImage);
+
+        window.open(blobUrl, '_blank');
+      });
   };
 
   async componentDidMount() {
@@ -83,44 +141,44 @@ export default class ManageSalesmen extends Component {
         if (userRoleId === 'error') {
         } else {
           this.setState({
-            smUserRoleId: userRoleId
+            smUserRoleId: userRoleId,
           });
         }
       }
-      this.fetchAllSalesmen();
+      this.fetchAllUsers();
     } else {
       this.props.history.push('/');
     }
   }
 
-  async fetchAllSalesmen() {
+  async fetchAllUsers() {
     const allUsers = await ManageUserController.fetchAllUsersByRole(
       this.state.smUserRoleId
     );
-    this.setState({ salesmenRowData: allUsers });
+    this.setState({ usersRowData: allUsers });
   }
 
-  handleChange = elem => {
+  handleChange = (elem) => {
     this.setState({
-      [elem.target.id]: elem.target.value
+      [elem.target.id]: elem.target.value,
     });
     this.clearValidationError(elem.target.id);
   };
 
   showValidationError = (elem, msg) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       errors: [
         ...prevState.errors,
         {
           elem,
-          msg
-        }
-      ]
+          msg,
+        },
+      ],
     }));
   };
 
-  clearValidationError = elem => {
-    this.setState(prevState => {
+  clearValidationError = (elem) => {
+    this.setState((prevState) => {
       let newErrors = [];
       for (let err of prevState.errors) {
         if (elem !== err.elem) {
@@ -132,7 +190,7 @@ export default class ManageSalesmen extends Component {
   };
 
   clearAllValidationError() {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       let newErrors = [];
       for (let err of prevState.errors) {
         newErrors.pop();
@@ -141,8 +199,8 @@ export default class ManageSalesmen extends Component {
     });
   }
 
-  handleAddSalesman = async elem => {
-    if (this.validateAddSalesman()) {
+  handleAddUsers = async (elem) => {
+    if (this.validateAddUsers()) {
       const result = await ManageUserController.addNewUser(
         this.state.smMobileNumber,
         this.state.smFullName,
@@ -151,31 +209,35 @@ export default class ManageSalesmen extends Component {
         this.state.smMobileNumber,
         this.state.smMonthlyTarget,
         this.state.smId,
-        this.state.createBtnAction
+        this.state.createBtnAction,
+        this.state.smImageFiles,
+        this.state.imageFileName,
+        this.state.imageId
       );
-
+      // console.log('result: ', result);
       if (result === 'success') {
         if (this.state.createBtnAction === 'create') {
-          this.setState({ dialogMessage: 'Salesman added successfully!!' });
+          this.setState({ dialogMessage: 'User added successfully!!' });
         } else {
-          this.setState({ dialogMessage: 'Salesman updated successfully!!' });
+          this.setState({ dialogMessage: 'User updated successfully!!' });
         }
 
-        this.setState({ openDialog: true });
-        this.fetchAllSalesmen();
-        this.handleResetSalesman();
+        this.fetchAllUsers();
+        this.handleResetUsers();
       } else {
         this.setState({
           dialogMessage:
-            'Internal error while adding a Salesman, please contact support!!'
+            'Internal error while adding a User, please contact support!!',
         });
       }
+
+      this.setState({ openDialog: true });
     } else {
       return false;
     }
   };
 
-  validateAddSalesman() {
+  validateAddUsers() {
     let valid = true;
     if (this.state.smFullName === '') {
       this.showValidationError('smFullName', 'Full Name can not be empty!');
@@ -195,7 +257,7 @@ export default class ManageSalesmen extends Component {
       this.showValidationError('smMobileNumber', 'Invalid Mobile Number!');
       valid = false;
     } else {
-      for (let rowData of this.state.salesmenRowData) {
+      for (let rowData of this.state.usersRowData) {
         if (
           this.state.smId.toString() !== rowData.userId.toString() &&
           this.state.smMobileNumber.toString() ===
@@ -229,23 +291,30 @@ export default class ManageSalesmen extends Component {
       valid = false;
     }
 
+    if (this.state.smImageFiles.length === 0) {
+      this.showValidationError('smImageFiles', 'Select some image!');
+      valid = false;
+    }
+
     return valid;
   }
 
-  handleResetSalesman = elem => {
+  handleResetUsers = (elem) => {
     this.setState({
       smMobileNumber: '',
       smFullName: '',
       smAddress: '',
       smMonthlyTarget: '',
-      createBtnText: 'Create a Salesman',
-      createBtnAction: 'create'
+      createBtnText: 'Create a User',
+      createBtnAction: 'create',
+      showImageWithLink: 'hide-display',
+      showImageWithoutLink: 'show-display',
     });
 
     this.clearAllValidationError();
   };
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
   };
@@ -253,23 +322,54 @@ export default class ManageSalesmen extends Component {
     this.gridApi.setQuickFilter(document.getElementById('quickFilter').value);
   }
 
-  onSelectionChanged() {
-    let selectedRows = this.gridApi.getSelectedRows();
-    if (selectedRows && selectedRows.length > 0) {
-      this.setState({
-        smMobileNumber: selectedRows[0].userMobileNumber,
-        smFullName: selectedRows[0].userAccountName,
-        smAddress: selectedRows[0].userAddress,
-        smMonthlyTarget: selectedRows[0].userMonthlyTarget,
-        createBtnText: 'Edit Salesman',
-        createBtnAction: 'edit',
-        smId: selectedRows[0].userId
-      });
+  onSelectionChanged(selectedRows) {
+    this.setState({
+      smMobileNumber: selectedRows.userMobileNumber,
+      smFullName: selectedRows.userAccountName,
+      smAddress: selectedRows.userAddress,
+      smMonthlyTarget: selectedRows.userMonthlyTarget,
+      imageFileName: selectedRows.userImage,
+      createBtnText: 'Edit User',
+      createBtnAction: 'edit',
+      smId: selectedRows.userId,
+      userImageId: selectedRows.userImageId,
+      imageId: selectedRows.userImageId,
+    });
 
-      this.clearAllValidationError();
-    } else {
-      this.handleResetSalesman();
-    }
+    this.clearAllValidationError();
+
+    this.setState({
+      showImageWithLink: 'show-display',
+      showImageWithoutLink: 'hide-display',
+    });
+  }
+
+  handleClose() {
+    this.setState({
+      openImage: false,
+      showImageWithLink: 'hide-display',
+      showImageWithoutLink: 'show-display',
+    });
+  }
+
+  handleSave(files) {
+    //Saving files to state for further use and closing Modal.
+    let fileReader = new FileReader();
+    fileReader.readAsDataURL(files[0]);
+    fileReader.onload = (file) => {
+      this.setState({
+        smImageFiles: file.target.result,
+        imageFileName: files[0].name,
+        openImage: false,
+      });
+    };
+  }
+
+  handleOpen() {
+    this.setState({
+      openImage: true,
+    });
+    this.clearValidationError('smImageFiles');
   }
 
   render() {
@@ -277,6 +377,7 @@ export default class ManageSalesmen extends Component {
     let smMobileNumberErrMsg = null;
     let smMonthlyTargetErrMsg = null;
     let smAddressErrMsg = null;
+    let smImageFileErrMsg = null;
 
     for (let err of this.state.errors) {
       if (err.elem === 'smFullName') {
@@ -290,6 +391,9 @@ export default class ManageSalesmen extends Component {
       }
       if (err.elem === 'smAddress') {
         smAddressErrMsg = err.msg;
+      }
+      if (err.elem === 'smImageFiles') {
+        smImageFileErrMsg = err.msg;
       }
     }
 
@@ -314,13 +418,13 @@ export default class ManageSalesmen extends Component {
           </DialogActions>
         </Dialog>
 
-        <div className='show-salesman-container'>
-          <div className='create-salesman-header'>
+        <div className='show-users-container'>
+          <div className='create-users-header'>
             <Typography variant='h6' component='h2'>
-              All Salesmen Details
+              All Users Details
             </Typography>
           </div>
-          <div className='quickFilter'>
+          <div className='quick-filter'>
             <TextField
               id='quickFilter'
               placeholder='Quick Filter'
@@ -329,30 +433,39 @@ export default class ManageSalesmen extends Component {
                   <InputAdornment position='start'>
                     <SearchSharp />
                   </InputAdornment>
-                )
+                ),
               }}
               onInput={this.onQuickFilterChanged.bind(this)}
             />
           </div>
-          <div style={{ width: '100%', float: 'left' }}>
-            <div className='ag-theme-balham salesmanDetailsTable'>
-              <AgGridReact
-                columnDefs={this.state.salesmenColumnsDef}
-                rowData={this.state.salesmenRowData}
-                rowSelection={this.state.rowSelection}
-                modules={this.state.modules}
-                defaultColDef={this.state.defaultColDef}
-                onGridReady={this.onGridReady}
-                onRowSelected={this.onSelectionChanged.bind(this)}
+          <div className='users-grid'>
+            <div>
+              <MaterialTable
+                title='All Product Details'
+                columns={this.state.usersColumnsDef}
+                data={this.state.usersRowData}
+                options={{
+                  columnsButton: true,
+                  exportButton: true,
+                  exportAllData: true,
+                }}
+                actions={[
+                  {
+                    icon: 'edit',
+                    tooltip: 'Edit Product',
+                    onClick: (event, rowData) =>
+                      this.onSelectionChanged(rowData),
+                  },
+                ]}
               />
             </div>
           </div>
         </div>
 
-        <div className='create-salesman-container'>
-          <div className='create-salesman-header'>
+        <div className='create-users-container'>
+          <div className='create-users-header'>
             <Typography variant='h6' component='h2'>
-              Add a new Salesman
+              Add a new User
             </Typography>
           </div>
           <div style={{ width: '100%', float: 'left' }}>
@@ -361,7 +474,7 @@ export default class ManageSalesmen extends Component {
               label='Full Name'
               variant='outlined'
               fullWidth
-              className='salesman-textfield'
+              className='users-textfield'
               margin='normal'
               required={true}
               onChange={this.handleChange}
@@ -377,7 +490,7 @@ export default class ManageSalesmen extends Component {
               variant='outlined'
               fullWidth
               required={true}
-              className='salesman-textfield'
+              className='users-textfield'
               margin='normal'
               onChange={this.handleChange}
               value={this.state.smMobileNumber}
@@ -392,7 +505,7 @@ export default class ManageSalesmen extends Component {
               variant='outlined'
               fullWidth
               required={true}
-              className='salesman-textfield'
+              className='users-textfield'
               margin='normal'
               onChange={this.handleChange}
               value={this.state.smMonthlyTarget}
@@ -409,7 +522,7 @@ export default class ManageSalesmen extends Component {
               rows='4'
               fullWidth
               variant='outlined'
-              className='salesman-textarea'
+              className='users-textarea'
               onChange={this.handleChange}
               required={true}
               value={this.state.smAddress}
@@ -418,13 +531,61 @@ export default class ManageSalesmen extends Component {
               {smAddressErrMsg ? smAddressErrMsg : ''}
             </small>
             <br></br>
+
+            <div className='image-div-container'>
+              <div className='image-div-sub-container'>
+                <Button
+                  id='imageBtn'
+                  variant='contained'
+                  color='secondary'
+                  className='btn-image-upload'
+                  onClick={this.handleOpen.bind(this)}
+                >
+                  Upload Photo ID
+                </Button>
+              </div>
+
+              <div className='image-div-text'>
+                <div className={this.state.showImageWithoutLink}>
+                  <Typography variant='h6' component='h4'>
+                    {this.state.imageFileName}
+                  </Typography>
+                </div>
+              </div>
+
+              <div className='image-div-text'>
+                <div className={this.state.showImageWithLink}>
+                  <a href='javascript:void(0);' onClick={this.downloadImage}>
+                    <Typography variant='h6' component='h4'>
+                      {this.state.imageFileName}
+                    </Typography>
+                  </a>
+                </div>
+              </div>
+
+              <DropzoneDialog
+                open={this.state.openImage}
+                onSave={this.handleSave.bind(this)}
+                acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                showPreviews={true}
+                maxFileSize={20000}
+                filesLimit={1}
+                onClose={this.handleClose.bind(this)}
+              />
+              <small className='danger-error'>
+                {smImageFileErrMsg ? smImageFileErrMsg : ''}
+              </small>
+            </div>
+            <br></br>
+            <br></br>
+            <br></br>
             <br></br>
             <Button
               id='createBtn'
               variant='contained'
               color='primary'
-              className='btn-primary-salesman'
-              onClick={this.handleAddSalesman}
+              className='btn-primary-users'
+              onClick={this.handleAddUsers}
             >
               {this.state.createBtnText}
             </Button>
@@ -432,8 +593,8 @@ export default class ManageSalesmen extends Component {
               id='resetBtn'
               variant='contained'
               color='primary'
-              className='btn-primary-salesman'
-              onClick={this.handleResetSalesman}
+              className='btn-primary-users'
+              onClick={this.handleResetUsers}
             >
               Reset
             </Button>

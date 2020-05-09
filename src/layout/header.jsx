@@ -54,7 +54,7 @@ class Header extends Component {
 
               <Grid item md={7} xs={3}>
                 <Typography className='title' variant='h5'>
-                  <Link to='/'>Inventory and Order Management System</Link>
+                  <Link to='/'>Order Management System</Link>
                 </Typography>
                 <Typography className='titleSmall' variant='h5'>
                   <Link to='/'>IOMS</Link>
